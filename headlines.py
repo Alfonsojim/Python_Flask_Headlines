@@ -2,12 +2,6 @@
 from flask import Flask
 import feedparser
 from flask import render_template
-from flask import request
-from flask import make_response
-import json
-import urllib
-import urllib2
-import datetime
 
 app= Flask(__name__)
 
