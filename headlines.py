@@ -31,7 +31,12 @@ articles['elm'] = feedparser.parse(RSS_FEED['elm'])['entries'][:5]
 
 @app.route("/")
 def get_news():
+  print type(articles)
   return render_template("home.html", articles=articles,titles=Titles)
+
+@app.route("/news/<string(length=3):journal>")
+def get_one_journal(journal='elp'):
+  return render_template("home.html", one_journal=articles[journal],one_title=Titles[journal])
 
 if __name__ == '__main__':
   app.run(port=5300,debug=True)
