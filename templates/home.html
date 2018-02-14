@@ -5,44 +5,15 @@
  <body>
   <h1>Headlines</h1>
   <h2>BBC Headlines</h2>
-  {%for article in bbc%}
-    {%if loop.index <=5%}
-      <b><a href="{{article.link}}">{{article.title}}</a></b><br />
-      <i>{{article.published}}</i><br />
-      <p>{{article.summary}}</p>
---------------------------------------------------------------------------------------------------------------------------------<br>
-  {%endif%}
-  {%endfor%}
-
-    <h2>CNN Headlines</h2>
-  {%for article in cnn%}
-    {%if loop.index <=5%}
-      <b><a href="{{article.link}}">{{article.title}}</a></b><br />
-      <i>{{article.published}}</i><br />
-      <p>{{article.summary}}</p>
---------------------------------------------------------------------------------------------------------------------------------<br>
-  {%endif%}
-  {%endfor%}
-
-      <h2>FOX Headlines</h2>
-  {%for article in fox%}
-    {%if loop.index <=5%}
-      <b><a href="{{article.link}}">{{article.title}}</a></b><br />
-      <i>{{article.published}}</i><br />
-      <p>{{article.summary}}</p>
---------------------------------------------------------------------------------------------------------------------------------<br>
-  {%endif%}
-  {%endfor%}
-
-      <h2>IOL Headlines</h2>
-  {%for article in iol%}
-    {%if loop.index <=5%}
-      <b><a href="{{article.link}}">{{article.title}}</a></b><br />
-      <i>{{article.published}}</i><br />
-      <p>{{article.summary}}</p>
---------------------------------------------------------------------------------------------------------------------------------<br>
-  {%endif%}
-  {%endfor%}
+  {% for key, value in articles.items() %}
+   <h2>{{ titles[key] }}</h2>
+   {% for article in value %}
+    <b><a href="{{article.link}}">{{article.title}}</a></b><br />
+    <i>{{article.published}}</i><br />
+    <p>{{article.summary}}</p>
+    <hr />
+   {% endfor %}
+  {% endfor %}
  </body>
 </html>
 

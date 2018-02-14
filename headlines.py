@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from flask import Flask
 import feedparser
 from flask import render_template
@@ -10,59 +11,33 @@ import datetime
 
 app= Flask(__name__)
 
-BBC_FEED = "http://feeds.bbci.co.uk/news/rss.xml"
-CNN_FEED = "http://rss.cnn.com/rss/edition.rss"
-FOX_FEED = "http://feeds.foxnews.com/foxnews/latest"
-IOL_FEED = "http://www.iol.co.za/cmlink/1.640"
+RSS_FEED = { 'elp':'http://ep00.epimg.net/rss/tags/ultimas_noticias.xml',
+             'bbc':'http://feeds.bbci.co.uk/news/rss.xml',
+             'lav':'http://www.lavanguardia.com/mvc/feed/rss/politica',
+             'cnn':'http://rss.cnn.com/rss/edition.rss',
+             'abc':'http://sevilla.abc.es/rss/feeds/Sevilla_Sevilla.xml',
+             'elm':'http://estaticos.elmundo.es/elmundo/rss/portada.xml'
+}
+Titles = {'elp':'El Pais: Ultimas noticas',
+          'bbc':'BBC headlines',
+          'lav':u'La Vanguardia: Política',
+          'cnn':'CNN headlines',
+          'abc':'ABC: Sevilla',
+          'elm':'El Mundo'
+}
+
+articles = {}
+articles['elp'] = feedparser.parse(RSS_FEED['elp'])['entries'][:5]
+articles['bbc'] = feedparser.parse(RSS_FEED['bbc'])['entries'][:5]
+articles['lav'] = feedparser.parse(RSS_FEED['lav'])['entries'][:5]
+articles['cnn'] = feedparser.parse(RSS_FEED['cnn'])['entries'][:5]
+articles['abc'] = feedparser.parse(RSS_FEED['abc'])['entries'][:5]
+articles['elm'] = feedparser.parse(RSS_FEED['elm'])['entries'][:5]
+
 
 @app.route("/")
 def get_news():
-  feed = feedparser.parse(BBC_FEED)
-  feedn = feedparser.parse(CNN_FEED)
-  feedf = feedparser.parse(FOX_FEED)
-  feedi = feedparser.parse(IOL_FEED)
-  return render_template("home.html", bbc=feed['entries'], cnn=feedn['entries'], fox=feedf['entries'], iol=feedi['entries'])
-  #feed = feedparser.parse(CNN_FEED)
-  #return render_template("home.html", ceene=feed['entries'])
-
-  
-
-
-
-#DEFAULTS = {
- #            'publication' : 'bbc',
- #          }
-#RSS_FEEDS = {'bbc':'http://feeds.bbci.co.uk/news/rss.xml',
-#             'cnn':'http://rss.cnn.com/rss/edition.rss',
-#             'fox':'http://feeds.foxnews.com/foxnews/latest',
-#             'iol':'http://www.iol.co.za/cmlink/1.640'}
-
-#
-#@app.route("/")
-#def home():
-#  publication = get_value_with_fallback('publication')
-#  articles=get_news(publication)
-
-#  response = make_response(render_template("home.html", articles=articles))
-#  expires = datetime.datetime.now() + datetime.timedelta(days=365)
-#  response.set_cookie("publication",publication,expires=expires)
-#  return response
-
-#def get_news(query):
-#  if not query or query.lower() not in RSS_FEEDS:
-#    query = DEFAULTS['publication']
-#  else:
-#  publication =  query.lower()
-#  feed = feedparser.parse(RSS_FEEDS[publication])
-#  return feed['entries']
-
-
-#def get_value_with_fallback(key):
-#  if request.args.get(key):
-#    return request.args.get(key)
-#  if request.cookies.get(key):
-#    return request.cookies.get(key)
-#  return DEFAULTS[key]
+  return render_template("home.html", articles=articles,titles=Titles)
 
 if __name__ == '__main__':
   app.run(port=5300,debug=True)
