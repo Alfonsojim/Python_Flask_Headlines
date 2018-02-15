@@ -2,6 +2,8 @@
 from flask import Flask
 import feedparser
 from flask import render_template
+from flask.views import MethodView
+import json
 
 app= Flask(__name__)
 
@@ -29,16 +31,47 @@ articles['abc'] = feedparser.parse(RSS_FEED['abc'])['entries'][:5]
 articles['elm'] = feedparser.parse(RSS_FEED['elm'])['entries'][:5]
 
 
+def getting_unres(article):
+       dict1 = {
+              'title':article.title,
+              'link':article.link,
+              'published':article.published
+       }
+       if hasattr(article, 'summary'):
+         dict1['summary'] = article.summary
+       else:
+         dict1['summary'] = ''
+       return dict1
+
+
 @app.route("/")
 def get_news():
   return render_template("home.html", articles=articles,titles=Titles)
 
 @app.route("/news/<string(length=3):journal>")
 def get_one_journal(journal):
-  if(journal in articles):
-     return render_template("home.html", one_journal=articles[journal],one_title=Titles[journal])
-  return get_news()
+  if(journal not in articles):
+     journal='elp'
+  return render_template("home.html", one_journal=articles[journal],one_title=Titles[journal])
 
+class NewView(MethodView) :
+  def get(self, journal='elp', id=None):
+     res = {}
+     one_journal = []
+     one_journal = articles[journal]
+     res['journal']=journal
+     if id is None:
+        id=0;
+        for article in one_journal:
+            res[id] = getting_unres(article)
+            id += 1
+     else:
+       article = one_journal[id]
+       if not article:
+         abort(404)
+       res[id] = getting_unres(article)
+     return json.dumps(res)
+                                                                   
 if __name__ == '__main__':
   app.run(port=5300,debug=True)
 
