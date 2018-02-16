@@ -71,6 +71,12 @@ class NewView(MethodView) :
          abort(404)
        res[id] = getting_unres(article)
      return json.dumps(res)
+
+new_view = NewView.as_view('new_view')
+app.add_url_rule('/api/news', view_func=new_view, methods=['GET'])
+app.add_url_rule('/api/news/<string(length=3):journal>', view_func=new_view, methods=['GET'])
+app.add_url_rule('/api/news/<string(minlength=3,maxlength=3):journal>/<int(min=0,max=4):id>', view_func=new_view, methods=['GET'])
+
                                                                    
 if __name__ == '__main__':
   app.run(port=5300,debug=True)
