@@ -52,7 +52,11 @@ def get_news():
 def get_one_journal(journal):
   if(journal not in articles):
      journal='elp'
-  return render_template("home.html", one_journal=articles[journal],one_title=Titles[journal])
+  dict_articles = {}
+  dict_titles = {}
+  dict_articles[journal] = articles[journal]
+  dict_titles[journal] = Titles[journal]
+  return render_template("home.html", articles=dict_articles,titles=dict_titles)
 
 class NewView(MethodView) :
   def get(self, journal='elp', id=None):

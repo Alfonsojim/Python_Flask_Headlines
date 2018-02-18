@@ -4,16 +4,6 @@
  </head>
  <body>
   <h1>Headlines</h1>
-  {% if one_journal %}
-     <h2>{{one_title}}</h2>
-     {% for article in one_journal %}
-           <b><a href="{{article.link}}">{{article.title}}</a></b><br />
-           <i>{{article.published}}</i><br />
-           <p>{{article.summary}}</p>
-           <hr />
-     {% endfor %}
-  {% endif %}
-  {% if articles %}
      {% for key, value in articles.items() %}
         <h2>{{ titles[key] }}</h2>
         {% for article in value %}
@@ -23,7 +13,6 @@
            <hr />
         {% endfor %}
       {% endfor %}
-  {% endif %}
  </body>
 </html>
 
