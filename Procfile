@@ -1,1 +1,1 @@
-web: gunicorn Python_Flask_Headlines:app
+web: gunicorn headlines:app
